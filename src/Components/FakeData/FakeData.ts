@@ -47,3 +47,12 @@ export function document2 () {
     })
     return documentPromise;
 }
+
+export function cancel (values: Documents) {
+    const names: Array<string> = [];
+    values.map((item) => names.push(item.name));
+    const cancelPromise: Promise<string> = new Promise(resolve => {
+        setTimeout(() => {resolve(`Товары ${names.join(', ')} успешно аннулированы`)}, 2000);
+    });
+    return cancelPromise;
+}

@@ -12,6 +12,8 @@ export declare type DocumentTableProps = {
     onClearSearch: () => void;
     totalVolume: number;
     totalQuantity: number;
+    postCancel: (values: Documents) => void;
+    tableLoading: boolean;
 }
 
 export declare type SearchProps = {

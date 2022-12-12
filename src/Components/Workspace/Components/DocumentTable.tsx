@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {Button, PageHeader, Popconfirm, Table, Tag} from "antd";
+import {Button, PageHeader, Popconfirm, Spin, Table, Tag} from "antd";
 import moment from "moment";
 import {DocumentTableProps} from "../WorkspaceTypes";
 import {Documents, DocumentType} from "../../FakeData/FakeDataTypes";
@@ -8,6 +8,7 @@ import {ColumnsType} from "antd/es/table";
 
 export default function DocumentTable(props: DocumentTableProps) {
     const [selected, setSelected] = useState<Documents>([]);
+    const [selectedKeys, setSelectedKeys] = useState<React.Key[]>([]);
     const [namesList, setNamesList] = useState<Array<string>>([]);
     const columns: ColumnsType<DocumentType> = [
         {
@@ -89,8 +90,10 @@ export default function DocumentTable(props: DocumentTableProps) {
             const names: Array<string> = [];
             selectedRows.map((item) => names.push(item.name));
             setSelected(selectedRows);
+            setSelectedKeys(selectedRowKeys)
             setNamesList(names);
         },
+        selectedRowKeys: selectedKeys,
     };
     const tableFooter = () => {
         return (
@@ -108,6 +111,11 @@ export default function DocumentTable(props: DocumentTableProps) {
                         title={`Вы уверены, что хотите аннулировать товары ${namesList.join(', ')}?`}
                         okText='Применить'
                         cancelText='Отклонить'
+                        onConfirm={() => {
+                            props.postCancel(selected);
+                            setSelectedKeys([]);
+                            setSelected([]);
+                        }}
                     >
                         <Button
                             danger
@@ -136,6 +144,7 @@ export default function DocumentTable(props: DocumentTableProps) {
                 rowSelection={{...rowSelection}}
                 scroll={{y: '65vh'}}
                 footer={tableFooter}
+                loading={props.tableLoading}
             />
         </div>
     )

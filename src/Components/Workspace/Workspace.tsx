@@ -1,12 +1,13 @@
 import React, {useEffect, useState} from "react";
-import {document1, document2} from "../FakeData/FakeData";
-import {Spin} from "antd";
+import {cancel, document1, document2} from "../FakeData/FakeData";
+import {notification, Spin} from "antd";
 import {Documents, DocumentType} from "../FakeData/FakeDataTypes";
 import DocumentTable from "./Components/DocumentTable";
 import {SearchValues} from "./WorkspaceTypes";
 
 export default function Workspace () {
     const [loading, setLoading] = useState<boolean>(false);
+    const [tableLoading, setTableLoading] = useState<boolean>(false);
     const [documents, setDocuments] = useState<Documents | null>(null);
     const [searchResult, setSearchResult] = useState<Documents | null>(null);
     const [totalVolume, setTotalVolume] = useState<number>(0);
@@ -31,6 +32,20 @@ export default function Workspace () {
             })
             .catch(() => {
                 setLoading(false);
+            })
+    }
+
+    const postCancel = (values: Documents) => {
+        setTableLoading(true);
+        cancel(values)
+            .then((res) => {
+                notification['success']({
+                    message: res,
+                })
+                setTableLoading(false);
+            })
+            .catch(() => {
+                setTableLoading(false);
             })
     }
 
@@ -81,6 +96,8 @@ export default function Workspace () {
                     onClearSearch={onClearSearch}
                     totalVolume={totalVolume}
                     totalQuantity={totalQuantity}
+                    postCancel={postCancel}
+                    tableLoading={tableLoading}
                 />
             }
         </div>
