@@ -1,17 +1,10 @@
-import React, {useEffect} from 'react';
-import {document1, document2} from "./Components/FakeData/FakeData";
+import React from 'react';
+import Workspace from "./Components/Workspace/Workspace";
 
-function App() {
-    useEffect(() => {
-        Promise.all([document1(), document2()])
-            .then(res => console.dir(res))
-    }, [])
-
+export default function App() {
     return (
         <div>
-            hi
+            <Workspace/>
         </div>
     );
 }
-
-export default App;

@@ -9,4 +9,6 @@ export declare type DocumentType = {
     currency: string
 }
 
-export declare type getDocumentType = ()=>DocumentType;
+export declare type Documents = Array<DocumentType>
+
+export declare type getDocumentType = (number)=>DocumentType;
