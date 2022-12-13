@@ -4,6 +4,7 @@ import {notification, Spin} from "antd";
 import {Documents, DocumentType} from "../FakeData/FakeDataTypes";
 import DocumentTable from "./Components/DocumentTable";
 import {SearchValues} from "./WorkspaceTypes";
+import moment from "moment";
 
 export default function Workspace () {
     const [loading, setLoading] = useState<boolean>(false);
@@ -12,6 +13,8 @@ export default function Workspace () {
     const [searchResult, setSearchResult] = useState<Documents | null>(null);
     const [totalVolume, setTotalVolume] = useState<number>(0);
     const [totalQuantity, setTotalQuantity] = useState<number>(0);
+
+    const formatDate = (date: string | number) => moment(date).format('DD.MM.YYYY');
 
     const getData = () => {
         setLoading(true);
@@ -54,17 +57,29 @@ export default function Workspace () {
     }, [])
 
     const onFinishSearch = (values: SearchValues) => {
-        setLoading(true);
+        setTableLoading(true);
         const searchKeys: Array<string> = [];
         for (let key in values) {
             if (values[key as keyof SearchValues]) searchKeys.push(key);
         }
         if (searchKeys.length > 0) {
-            let result: Documents = [];
+            let result: Documents = documents ? documents : [];
             searchKeys.map((key) => {
                 if (values && values[key as keyof SearchValues] && documents) {
-                    result = documents.filter((item) => {
-                        return item[key as keyof DocumentType].toString().includes(values[key as keyof SearchValues].toString().trim());
+                    result = result.filter((item) => {
+                        if (key === 'delivery_date') {
+                            return formatDate(item[key as keyof DocumentType]) ===
+                                formatDate(values[key as keyof SearchValues]);
+                        } else if (key === 'sum' || key === 'qty' || key === 'volume') {
+                            return item[key as keyof DocumentType] ===
+                                values[key as keyof SearchValues];
+                        } else if (key === 'total') {
+                            return `${item['sum'] + item['qty']} ${item.currency}`
+                                .includes(values[key as keyof SearchValues].toString().trim());
+                        } else {
+                            return item[key as keyof DocumentType].toString().toUpperCase()
+                                .includes(values[key as keyof SearchValues].toString().toUpperCase().trim());
+                        }
                     })
                 }
             });
@@ -73,7 +88,7 @@ export default function Workspace () {
             setSearchResult(documents);
         }
 
-        setLoading(false);
+        setTableLoading(false);
     }
 
     const onClearSearch = () => {

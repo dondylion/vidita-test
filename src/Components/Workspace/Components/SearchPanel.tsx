@@ -1,6 +1,8 @@
 import React from "react";
-import {Button, Col, Form, Input, Row, Select} from "antd";
+import {Button, Col, DatePicker, Form, Input, InputNumber, Row, Select} from "antd";
 import {SearchProps} from "../WorkspaceTypes";
+import locale from 'antd/es/date-picker/locale/ru_RU';
+import 'moment/locale/ru';
 
 export default function SearchPanel(props: SearchProps) {
     const [form] = Form.useForm();
@@ -47,7 +49,12 @@ export default function SearchPanel(props: SearchProps) {
                         name='sum'
                         label='Сумма'
                     >
-                        <Input/>
+                        <InputNumber
+                            controls={false}
+                            style={{width: '100%'}}
+                            min={1}
+                            precision={0}
+                        />
                     </Form.Item>
                 </Col>
                 <Col span={4}>
@@ -56,7 +63,12 @@ export default function SearchPanel(props: SearchProps) {
                         name='qty'
                         label='Количество'
                     >
-                        <Input/>
+                        <InputNumber
+                            controls={false}
+                            style={{width: '100%'}}
+                            min={1}
+                            precision={0}
+                        />
                     </Form.Item>
                 </Col>
                 <Col span={4}>
@@ -65,7 +77,12 @@ export default function SearchPanel(props: SearchProps) {
                         name='volume'
                         label='Объём'
                     >
-                        <Input/>
+                        <InputNumber
+                            controls={false}
+                            style={{width: '100%'}}
+                            min={1}
+                            precision={0}
+                        />
                     </Form.Item>
                 </Col>
                 <Col span={4}>
@@ -74,7 +91,11 @@ export default function SearchPanel(props: SearchProps) {
                         name='delivery_date'
                         label='Дата доставки'
                     >
-                        <Input/>
+                        <DatePicker
+                            style={{width: '100%'}}
+                            format='DD.MM.YYYY'
+                            locale={locale}
+                        />
                     </Form.Item>
                 </Col>
                 <Col span={4}>
