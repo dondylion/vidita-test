@@ -131,21 +131,23 @@ export default function DocumentTable(props: DocumentTableProps) {
 
     return (
         <div style={{display: 'flex', flexDirection: 'column', justifyContent: 'space-between', height: '100vh'}}>
-            <PageHeader>
-                <SearchPanel onFinish={props.onFinishSearch} onClear={props.onClearSearch}/>
-            </PageHeader>
-            <Table
-                dataSource={props.content}
-                pagination={false}
-                bordered
-                columns={columns}
-                size='small'
-                rowKey={(record) => record.id}
-                rowSelection={{...rowSelection}}
-                scroll={{y: '65vh'}}
-                footer={tableFooter}
-                loading={props.tableLoading}
-            />
+            <div>
+                <PageHeader>
+                    <SearchPanel onFinish={props.onFinishSearch} onClear={props.onClearSearch}/>
+                </PageHeader>
+                <Table
+                    dataSource={props.content}
+                    pagination={false}
+                    bordered
+                    columns={columns}
+                    size='small'
+                    rowKey={(record) => record.id}
+                    rowSelection={{...rowSelection}}
+                    scroll={{y: '65vh'}}
+                    loading={props.tableLoading}
+                />
+            </div>
+            <footer style={{padding: '10px', backgroundColor: '#fafafa'}}>{tableFooter()}</footer>
         </div>
     )
 }
